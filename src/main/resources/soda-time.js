@@ -1,7 +1,31 @@
 /*global soda:true*/
 
 var soda = (function(){
-	
+    
+    function padZero(v){
+        if(v<10){
+            return "0" + v;
+        } else {
+            return "" + v;
+        }
+    }
+    
+    function englishNameOfMonth(monthNum){
+        var names = ["January", "February", "March", "April", "May", "June",
+                     "July", "August", "September", "October", "November", "December"];
+        return names[monthNum-1];
+    }
+    
+    function Formatter(format, lang){
+        if(format==="mmm dd, yyyy"){
+            return function(date){
+                return englishNameOfMonth(date.month()).substring(0, 3) + " " + padZero(date.day()) + ", " + date.year();
+            };
+        }else{
+            throw 'Invalid format: "' + format + '"';
+        }
+    }
+    
 	function CalendarDay(){
 		var year, month, day, parts, string;
 		
@@ -24,13 +48,6 @@ var soda = (function(){
 		}
 		
 		function toString(){
-			function padZero(v){
-				if(v<10){
-					return "0" + v;
-				} else {
-					return "" + v;
-				}
-			}
 			return year + "-" + padZero(month) + "-" + padZero(day);
 		}
 		
@@ -67,6 +84,7 @@ var soda = (function(){
 	}
 	
 	return {
-		CalendarDay:CalendarDay
+		CalendarDay:CalendarDay,
+		Formatter:Formatter
 	};
 }());
